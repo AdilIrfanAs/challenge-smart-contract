@@ -1,1 +1,8 @@
 # Challenge Smart Contract
+
+network : goerli
+
+
+MasterChef	0x80C7DD17B01855a6D2347444a0FCC36136a314de
+SushiV2Factory	0xc35DADB65012eC5796536bD9864eD8773aBc74C4
+SushiSwapRouter	0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506

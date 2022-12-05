@@ -3,16 +3,16 @@ require("@nomiclabs/hardhat-etherscan");
 require("dotenv").config();
 
 module.exports = {
-  defaultNetwork: "bsc_testnet",
+  defaultNetwork: "goerli",
   networks: {
     hardhat: {},
-    bsc_testnet: {
-      url: "https://data-seed-prebsc-1-s3.binance.org:8545",
+    goerli: {
+      url: "https://goerli.infura.io/v3/",
       accounts: [process.env.PK]
     }
   },
   etherscan: {
-    apiKey: process.env.BSCSCAN_API_KEY // bscscan
+    apiKey: process.env.BSCSCAN_API_KEY // etherscan
     
   },
   solidity: {
