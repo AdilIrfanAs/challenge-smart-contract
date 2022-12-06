@@ -2,7 +2,7 @@
   "name": "challenge-smart-contract",
   "scripts": {
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run ./scripts/deploy.js",
+    "deploy": "npx hardhat run ./scripts/deployAll.js",
     "lint": "prettier --list-different 'contracts/**/*.sol'"
   },
   "author": "Adil Irfan",

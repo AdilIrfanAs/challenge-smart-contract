@@ -3,11 +3,17 @@ require("@nomiclabs/hardhat-etherscan");
 require("dotenv").config();
 
 module.exports = {
-  defaultNetwork: "goerli",
+  defaultNetwork: "bsc_testnet",
   networks: {
     hardhat: {},
+    bsc_testnet: {
+      chainId: 97,
+      url: "https://data-seed-prebsc-1-s3.binance.org:8545",
+      accounts: [process.env.PK]
+    },
     goerli: {
-      url: "https://goerli.infura.io/v3/",
+      chainId: 5,
+      url: "https://goerli.infura.io/v3/"+process.env.INFURA,
       accounts: [process.env.PK]
     }
   },
@@ -19,6 +25,15 @@ module.exports = {
     compilers: [
       {
         version: "0.8.9"
+      },
+      {
+        version: "0.8.0"
+      },
+      {
+        version: "0.6.12"
+      },
+      {
+        version: "0.4.18"
       },
     ],
     settings: {
