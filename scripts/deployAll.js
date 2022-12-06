@@ -69,17 +69,33 @@ async function main() {
   //   console.log("Verification error:", e.message);
   // }
 
-  console.log(".......... MasterChef ..........");
-  const MasterChef = await hre.ethers.getContractFactory("contracts/MasterChef.sol:MasterChef");
-  const masterChef = await MasterChef.deploy("0xB5B8256057e1314Dd1Eae89f86deb3B771Ad2716",deployer.address,"100000000000000000000","8078631","10850000");
-  await masterChef.deployTransaction.wait(2);
-  await masterChef.deployed();
+  // console.log(".......... MasterChef ..........");
+  // const MasterChef = await hre.ethers.getContractFactory("contracts/MasterChef.sol:MasterChef");
+  // const masterChef = await MasterChef.deploy("0xB5B8256057e1314Dd1Eae89f86deb3B771Ad2716",deployer.address,"100000000000000000000","8078631","10850000");
+  // await masterChef.deployTransaction.wait(2);
+  // await masterChef.deployed();
+  // try {
+  //   await hre.run("verify:verify", 
+  //   { 
+  //     address: masterChef.address,
+  //     contract: "contracts/MasterChef.sol:MasterChef",
+  //     constructorArguments: ["0xB5B8256057e1314Dd1Eae89f86deb3B771Ad2716",deployer.address,"100000000000000000000","8078631","10850000"]
+  //   });
+  // } catch (e) {
+  //   console.log("Verification error:", e.message);
+  // }
+
+  console.log(".......... Smart Wallet ..........");
+  const SmartWallet = await hre.ethers.getContractFactory("contracts/SmartWallet.sol:SmartWallet");
+  const smartWallet = await SmartWallet.deploy("0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D");
+  await smartWallet.deployTransaction.wait(2);
+  await smartWallet.deployed();
   try {
     await hre.run("verify:verify", 
     { 
-      address: masterChef.address,
-      contract: "contracts/MasterChef.sol:MasterChef",
-      constructorArguments: ["0xB5B8256057e1314Dd1Eae89f86deb3B771Ad2716",deployer.address,"100000000000000000000","8078631","10850000"]
+      address: smartWallet.address,
+      contract: "contracts/SmartWallet.sol:SmartWallet",
+      constructorArguments: ["0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D"]
     });
   } catch (e) {
     console.log("Verification error:", e.message);

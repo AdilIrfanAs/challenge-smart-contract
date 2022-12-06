@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.6.12;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./MasterChef.sol";
+
+
 
 interface IUniswapV2Router01 {
     function factory() external pure returns (address);
@@ -140,18 +142,26 @@ contract SmartWallet {
   address public router;
   address public masterChef;
 
-  function liquifyAndStake(address token, uint256 tokenAmount) external {
+  constructor(address _router, address _masterChef) public {
+    router = _router;
+    masterChef = _masterChef;
+  }
+
+  function liquifyAndStake(address token, uint256 tokenAmount) payable external {
     // Approve tokens
     IERC20 _token = IERC20(token);
     _token.approve(router, tokenAmount);
     // Adding liquidity
-    addLiquidity(token,tokenAmount);
+    uint liquidityAmount = addLiquidity(token,tokenAmount);
+    // stake the lp token's in masterchef to earn sushi tokens
+    MasterChef _masterChef = MasterChef(masterChef);
+    _masterChef.deposit(0,liquidityAmount);
   }
 
-  function addLiquidity(address token,uint256 tokenAmount) internal {
+  function addLiquidity(address token,uint256 tokenAmount) internal returns(uint liquidity) {
     IUniswapV2Router02 _router = IUniswapV2Router02(router);
     // add the liquidity
-    _router.addLiquidityETH{value: msg.value}(
+    (,,uint256 liquidity) = _router.addLiquidityETH{value: msg.value}(
       token,
       tokenAmount,
       0, // slippage is unavoidable
