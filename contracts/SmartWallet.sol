@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity >=0.6.12;
 
 import "./MasterChef.sol";
 
@@ -138,6 +138,22 @@ interface IUniswapV2Router01 {
     ) external;
 }
 
+interface IUniswapV2Factory {
+    event PairCreated(address indexed token0, address indexed token1, address pair, uint);
+
+    function feeTo() external view returns (address);
+    function feeToSetter() external view returns (address);
+
+    function getPair(address tokenA, address tokenB) external view returns (address pair);
+    function allPairs(uint) external view returns (address pair);
+    function allPairsLength() external view returns (uint);
+
+    function createPair(address tokenA, address tokenB) external returns (address pair);
+
+    function setFeeTo(address) external;
+    function setFeeToSetter(address) external;
+}
+
 contract SmartWallet {
   address public router;
   address public masterChef;
@@ -146,15 +162,18 @@ contract SmartWallet {
     router = _router;
     masterChef = _masterChef;
   }
+    event Received(address, uint);
+    receive() external payable {
+        emit Received(msg.sender, msg.value);
+    }
 
   function liquifyAndStake(address token, uint256 tokenAmount) payable external {
     // Approve tokens
     IERC20 _token = IERC20(token);
     _token.transferFrom(msg.sender,address(this), tokenAmount);
-    address(this).call.value(msg.value)();
     _token.approve(router, tokenAmount);
     // Adding liquidity
-      IUniswapV2Router02 _router = IUniswapV2Router02(router);
+    IUniswapV2Router02 _router = IUniswapV2Router02(router);
     // add the liquidity
     (,,uint256 liquidity) = _router.addLiquidityETH{value: msg.value}(
       token,
@@ -164,7 +183,13 @@ contract SmartWallet {
       address(this),
       block.timestamp + 360
     );
+
     // stake the lp token's in masterchef to earn sushi tokens
+    
+    IUniswapV2Factory _factory = IUniswapV2Factory(_router.factory());
+    IERC20 lptoken = IERC20(_factory.getPair(_router.WETH(),token));
+    lptoken.approve(masterChef,liquidity);
+
     MasterChef _masterChef = MasterChef(masterChef);
     _masterChef.deposit(0,liquidity);
   }
