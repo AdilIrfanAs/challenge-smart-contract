@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.12;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./MasterChef.sol";
 import "./interfaces/IUniswapV2Factory.sol";
 import "./interfaces/IUniswapV2Router02.sol";
 
-contract SmartWallet {
+contract BoostActions is ReentrancyGuard {
   address public router;
   address public masterChef;
 
@@ -20,11 +21,12 @@ contract SmartWallet {
     emit Received(msg.sender, msg.value);
   }
 
-  function liquifyAndStake(address token, uint256 tokenAmount) external payable {
+  function liquifyAndStake(address token, uint256 tokenAmount) external payable nonReentrant {
     // Approve tokens
     IERC20 _token = IERC20(token);
     _token.transferFrom(msg.sender, address(this), tokenAmount);
     _token.approve(router, tokenAmount);
+
     // Adding liquidity
     IUniswapV2Router02 _router = IUniswapV2Router02(router);
     // add the liquidity
@@ -38,11 +40,11 @@ contract SmartWallet {
     );
 
     // stake the lp token's in masterchef to earn sushi tokens
-
     IUniswapV2Factory _factory = IUniswapV2Factory(_router.factory());
     IERC20 lptoken = IERC20(_factory.getPair(_router.WETH(), token));
     lptoken.approve(masterChef, liquidity);
 
+    // Staking the lp's token to masterChef
     MasterChef _masterChef = MasterChef(masterChef);
     _masterChef.deposit(0, liquidity);
   }

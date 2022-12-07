@@ -85,25 +85,21 @@ async function main() {
   //   console.log("Verification error:", e.message);
   // }
 
-  console.log(".......... Smart Wallet ..........");
-  const SmartWallet = await hre.ethers.getContractFactory("contracts/SmartWallet.sol:SmartWallet");
-  const smartWallet = await SmartWallet.deploy("0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D");
-  await smartWallet.deployTransaction.wait(2);
-  await smartWallet.deployed();
+  console.log(".......... BoostActions ..........");
+  const BoostActions = await hre.ethers.getContractFactory("contracts/BoostActions.sol:BoostActions");
+  const boostActions = await BoostActions.deploy("0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D");
+  await boostActions.deployTransaction.wait(2);
+  await boostActions.deployed();
   try {
     await hre.run("verify:verify", 
     { 
-      address: smartWallet.address,
-      contract: "contracts/SmartWallet.sol:SmartWallet",
+      address: boostActions.address,
+      contract: "contracts/BoostActions.sol:BoostActions",
       constructorArguments: ["0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D"]
     });
   } catch (e) {
     console.log("Verification error:", e.message);
   }
-
-  //8078631
-
-
 
   // console.log(".......... FINAL DEPLOYED CONTRACT ADDRESSES ..........");
   // console.log("DEPLOYER:         deployed:", deployer.address);
