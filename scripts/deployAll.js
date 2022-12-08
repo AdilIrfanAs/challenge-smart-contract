@@ -103,6 +103,22 @@ async function main() {
 
 
   // console.log(".......... DS - Smart Wallet ..........");
+  // const DSProxyFactory = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxyFactory");
+  // const dSProxyFactory = await DSProxyFactory.deploy();
+  // await dSProxyFactory.deployTransaction.wait(2);
+  // await dSProxyFactory.deployed();
+  // try {
+  //   await hre.run("verify:verify", 
+  //   { 
+  //     address: dSProxyFactory.address,
+  //     contract: "contracts/DSProxy.sol:DSProxyFactory",
+  //     constructorArguments: []
+  //   });
+  // } catch (e) {
+  //   console.log("Verification error:", e.message);
+  // }
+
+
   // const DSProxyCache = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxyCache");
   // const dSProxyCache = await DSProxyCache.deploy();
   // await dSProxyCache.deployTransaction.wait(2);
@@ -118,35 +134,22 @@ async function main() {
   //   console.log("Verification error:", e.message);
   // }
 
-  // const DSProxy = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxy");
-  // const dSProxy = await DSProxy.deploy(dSProxyCache.address);
-  // await dSProxy.deployTransaction.wait(2);
-  // await dSProxy.deployed();
-  // try {
-  //   await hre.run("verify:verify", 
-  //   { 
-  //     address: dSProxy.address,
-  //     contract: "contracts/DSProxy.sol:DSProxy",
-  //     constructorArguments: [dSProxyCache.address]
-  //   });
-  // } catch (e) {
-  //   console.log("Verification error:", e.message);
-  // }
-
-  const DSProxyFactory = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxyFactory");
-  const dSProxyFactory = await DSProxyFactory.deploy();
-  await dSProxyFactory.deployTransaction.wait(2);
-  await dSProxyFactory.deployed();
+  const DSProxy = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxy");
+  const dSProxy = await DSProxy.deploy("0x64ce5fdc702ea13d742bc74006746455bcea383e");
+  await dSProxy.deployTransaction.wait(2);
+  await dSProxy.deployed();
   try {
     await hre.run("verify:verify", 
     { 
-      address: dSProxyFactory.address,
-      contract: "contracts/DSProxy.sol:DSProxyFactory",
-      constructorArguments: []
+      address: dSProxy.address,
+      contract: "contracts/DSProxy.sol:DSProxy",
+      constructorArguments: ["0x64ce5fdc702ea13d742bc74006746455bcea383e"]
     });
   } catch (e) {
     console.log("Verification error:", e.message);
   }
+
+
 
   // console.log(".......... FINAL DEPLOYED CONTRACT ADDRESSES ..........");
   // console.log("DEPLOYER:         deployed:", deployer.address);
