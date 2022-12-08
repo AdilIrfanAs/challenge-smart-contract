@@ -85,17 +85,64 @@ async function main() {
   //   console.log("Verification error:", e.message);
   // }
 
-  console.log(".......... BoostActions ..........");
-  const BoostActions = await hre.ethers.getContractFactory("contracts/BoostActions.sol:BoostActions");
-  const boostActions = await BoostActions.deploy("0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D");
-  await boostActions.deployTransaction.wait(2);
-  await boostActions.deployed();
+  // console.log(".......... BoostActions ..........");
+  // const BoostActions = await hre.ethers.getContractFactory("contracts/BoostActions.sol:BoostActions");
+  // const boostActions = await BoostActions.deploy("0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D");
+  // await boostActions.deployTransaction.wait(2);
+  // await boostActions.deployed();
+  // try {
+  //   await hre.run("verify:verify", 
+  //   { 
+  //     address: boostActions.address,
+  //     contract: "contracts/BoostActions.sol:BoostActions",
+  //     constructorArguments: ["0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D"]
+  //   });
+  // } catch (e) {
+  //   console.log("Verification error:", e.message);
+  // }
+
+
+  // console.log(".......... DS - Smart Wallet ..........");
+  // const DSProxyCache = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxyCache");
+  // const dSProxyCache = await DSProxyCache.deploy();
+  // await dSProxyCache.deployTransaction.wait(2);
+  // await dSProxyCache.deployed();
+  // try {
+  //   await hre.run("verify:verify", 
+  //   { 
+  //     address: dSProxyCache.address,
+  //     contract: "contracts/DSProxy.sol:DSProxyCache",
+  //     constructorArguments: []
+  //   });
+  // } catch (e) {
+  //   console.log("Verification error:", e.message);
+  // }
+
+  // const DSProxy = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxy");
+  // const dSProxy = await DSProxy.deploy(dSProxyCache.address);
+  // await dSProxy.deployTransaction.wait(2);
+  // await dSProxy.deployed();
+  // try {
+  //   await hre.run("verify:verify", 
+  //   { 
+  //     address: dSProxy.address,
+  //     contract: "contracts/DSProxy.sol:DSProxy",
+  //     constructorArguments: [dSProxyCache.address]
+  //   });
+  // } catch (e) {
+  //   console.log("Verification error:", e.message);
+  // }
+
+  const DSProxyFactory = await hre.ethers.getContractFactory("contracts/DSProxy.sol:DSProxyFactory");
+  const dSProxyFactory = await DSProxyFactory.deploy();
+  await dSProxyFactory.deployTransaction.wait(2);
+  await dSProxyFactory.deployed();
   try {
     await hre.run("verify:verify", 
     { 
-      address: boostActions.address,
-      contract: "contracts/BoostActions.sol:BoostActions",
-      constructorArguments: ["0x03Fd32890EBC1C75AD2F88dD77EAA70A1e9a14bE","0x068D40317ff9Cd17ebD671aFc92eC7275485729D"]
+      address: dSProxyFactory.address,
+      contract: "contracts/DSProxy.sol:DSProxyFactory",
+      constructorArguments: []
     });
   } catch (e) {
     console.log("Verification error:", e.message);
